@@ -7,6 +7,9 @@
   5. Event Handling
   6. Class & Style Binding
   7. Computed Properties
+  8. Components
+  9. Communicating Events
+  10. Forms
 
 ## Vue Instance
 
@@ -64,3 +67,34 @@
   1. Computed properties calculate a value rather than store a value.
   2. Computed properties can use data from your app to calculate its values.
   3. Computed properties are cached, meaning the result is saved until its dependencies change.
+
+## Components
+
+  1. Components are blocks of code, grouped together within a custom element
+  2. Components make applications more manageable by breaking up the whole into reusuable parts that have their own structure and behavior
+  3. Data on a component must be a function
+  4. Props are used to pass data from parent to child
+  5. We can specify requirements for the props a component is receiving
+  6. Props are fed into a component through a custom attribute
+  7. Props can be dynamically bound to the parent’s data
+  8. Vue dev tools provide helpful insight about your components
+  9. https://medium.com/js-dojo/7-ways-to-define-a-component-template-in-vuejs-c04e0c72900d
+
+## Communicating Events
+
+  1. A component can let its parent know that an event has happened with $emit
+  2. A component can use an event handler with the v-on directive ( @ for short) to listen for an event emission, which can trigger a method on the parent
+  3. A component can $emit data along with the announcement that an event has occurred
+  4. A parent can use data emitted from its child
+
+## Forms
+
+  1. https://vuejs.org/v2/guide/events.html#Event-Modifiers
+  2. We can use the v-model directive to create two-way binding on form elements
+  3. We can use the .number modifier to tell Vue to cast that value as a number, but there is a bug with it
+  4. We can use the .prevent event modifier to stop the page from reloading when the form is submitted
+  5. We can use Vue to do fairly simple custom form validation
+  6. https://vuejs.org/v2/cookbook/form-validation.html#Another-Example-of-Custom-Validation
+  7. https://vuejs.org/v2/guide/forms.html#Modifiers
+  8. https://vuejs.org/v2/guide/events.html#Event-Modifiers
+  9. https://vuejs.org/v2/cookbook/form-validation.html#Another-Example-of-Custom-Validation
