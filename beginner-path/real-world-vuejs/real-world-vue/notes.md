@@ -6,6 +6,7 @@
   4. Dynamic routing & history mode
   5. Single file Vue components
   6. Gloal components
+  7. Slots
 
 ## Dynamic routing & history mode
 
@@ -35,3 +36,13 @@
   6. https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial
   7. https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg
   8. https://vuejs.org/v2/guide/components-registration.html#Automatic-Global-Registration-of-Base-Components
+
+## Slots
+
+  1. How to use slots for dynamic template code
+  2. How to set default slot content
+  3. How to use multiple, named slots
+  4. How to use slots for dynamic template code
+  5. How to set default slot content
+  6. How to use multiple named slots
+  7. https://vuejs.org/v2/guide/components-slots.html
