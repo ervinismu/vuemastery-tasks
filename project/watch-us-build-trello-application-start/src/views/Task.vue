@@ -1,15 +1,15 @@
 <template>
   <div class="task-view">
     <div class="flex flex-col flex-grow items-start justify-between px-4">
-      {{ task.name }}
       <input
+        type="text"
         class="p-2 w-full mr-2 block text-x1 font-bold"
         :value="task.name"
-        @keyup.enter="updateTaskProperty($event, 'name')"
         @change="updateTaskProperty($event, 'name')"
+        @keyup.enter="updateTaskProperty($event, 'name')"
       />
+
       <textarea
-        placeholder="Enter task description"
         class="relative bg-transparent px-2 border mt-2 h-64 border-none leading-normal"
         :value="task.description"
         @change="updateTaskProperty($event, 'description')"

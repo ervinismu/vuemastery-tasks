@@ -5,6 +5,11 @@
         class="column"
         v-for="(column, $columnIndex) of board.columns"
         :key="$columnIndex"
+        draggable
+        @drop="moveTaskOrColumn($event, column.tasks, $columnIndex)"
+        @dragover.prevent
+        @dragenter.prevent
+        @dragstart.self="pickupColumn($event, $columnIndex)"
       >
 
       <div class="flex items-center mb-2 font-bold">
@@ -16,7 +21,12 @@
             class="task"
             v-for="(task, $taskIndex) of column.tasks"
             :key="$taskIndex"
+            draggable
+            @dragstart="pickupTask($event, $taskIndex, $columnIndex)"
             @click="goToTask(task)"
+            @dragover.prevent
+            @dragenter.prevent
+            @drop.stop="moveTaskOrColumn($event, column.tasks, $columnIndex, $taskIndex)"
           >
             <span class="w-full flex-no-shrink font-bold">
               {{ task.name }}
@@ -35,7 +45,6 @@
             @keyup.enter="createTask($event, column.tasks)"
           />
         </div>
-
       </div>
     </div>
 
@@ -61,14 +70,90 @@ export default {
   },
   methods: {
     goToTask (task) {
+      console.log('=== [BOARD | METHODS] GO TO TASK')
+
       this.$router.push({ name: 'task', params: { id: task.id } })
     },
     close () {
+      console.log('=== [BOARD | METHODS] CLOSE')
+
       this.$router.push({ name: 'board' })
     },
     createTask (e, tasks) {
-      this.$store.commit('CREATE_TASK', { tasks, name: e.target.value })
+      console.log('=== [BOARD | METHODS] CREATE TASK')
+
+      this.$store.commit('CREATE_TASK', {
+        tasks,
+        name: e.target.value
+      })
       e.target.value = ''
+    },
+    pickupTask (e, taskIndex, fromColumnIndex) {
+      console.log('=== [BOARD | METHODS] PICK UP TASK')
+      console.log(`taskIndex : ${taskIndex}`)
+      console.log(`fromColumnIndex : ${fromColumnIndex}`)
+      console.log('===')
+
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.dropEffect = 'move'
+
+      e.dataTransfer.setData('from-task-index', taskIndex)
+      e.dataTransfer.setData('from-column-index', fromColumnIndex)
+      e.dataTransfer.setData('type', 'task')
+    },
+    pickupColumn (e, fromColumnIndex) {
+      console.log('=== [BOARD | METHODS] PICK UP COLUMN')
+      console.log(`fromColumnIndex : ${fromTaskIndex}`)
+      console.log('===')
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.dropEffect = 'move'
+
+      e.dataTransfer.setData('from-column-index', fromColumnIndex)
+      e.dataTransfer.setData('type', 'column')
+    },
+    moveTaskOrColumn (e, toTasks, toColumnIndex, toTaskIndex) {
+      console.log('=== [BOARD | METHODS] MOVE TASK OR COLUMN')
+      console.log(`toTasks : ${toTasks}`)
+      console.log(`toColumnIndex : ${toColumnIndex}`)
+      console.log(`toTaskIndex : ${toTaskIndex}`)
+      console.log('===')
+
+      const type = e.dataTransfer.getData('type')
+
+      if (type === 'task') {
+        this.moveTask(e, toTasks, toTaskIndex !== undefined ? toTaskIndex : toTasks.length)
+      } else {
+        this.moveColumn(e, toColumnIndex)
+      }
+    },
+    moveTask (e, toTasks, toTaskIndex) {
+      console.log('=== [BOARD | METHODS] MOVE TASK')
+      console.log(`toTasks : ${toTasks}`)
+      console.log(`toTaskIndex : ${toTaskIndex}`)
+      console.log('===')
+
+      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
+      const fromTasks = this.board.columns[fromColumnIndex].tasks
+      const fromTaskIndex = e.dataTransfer.getData('from-task-index')
+
+      this.$store.commit('MOVE_TASK', {
+        fromTasks,
+        fromTaskIndex,
+        toTasks,
+        toTaskIndex
+      })
+    },
+    moveColumn (e, toColumnIndex) {
+      console.log('=== [BOARD | METHODS] MOVE COLUMN')
+      console.log(`toColumnIndex : ${toColumnIndex}`)
+      console.log('===')
+
+      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
+
+      this.$store.commit('MOVE_COLUMN', {
+        fromColumnIndex,
+        toColumnIndex
+      })
     }
   }
 }
