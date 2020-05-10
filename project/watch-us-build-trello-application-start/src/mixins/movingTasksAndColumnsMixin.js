@@ -14,48 +14,36 @@ export default {
     }
   },
   methods: {
-    moveTaskOrColumn (e, toTasks, toColumnIndex, toTaskIndex) {
+    moveTaskOrColumn (transferData) {
       console.log('=== [BOARD | METHODS] MOVE TASK OR COLUMN')
-      console.log(`toTasks : ${toTasks}`)
-      console.log(`toColumnIndex : ${toColumnIndex}`)
-      console.log(`toTaskIndex : ${toTaskIndex}`)
       console.log('===')
 
-      const type = e.dataTransfer.getData('type')
-
-      if (type === 'task') {
-        this.moveTask(e, toTasks, toTaskIndex !== undefined ? toTaskIndex : toTasks.length)
+      if (transferData.type === 'task') {
+        this.moveTask(transferData)
       } else {
-        this.moveColumn(e, toColumnIndex)
+        this.moveColumn(transferData)
       }
     },
-    moveTask (e, toTasks, toTaskIndex) {
+    moveTask ({ fromColumnIndex, fromTaskIndex }) {
       console.log('=== [BOARD | METHODS] MOVE TASK')
-      console.log(`toTasks : ${toTasks}`)
-      console.log(`toTaskIndex : ${toTaskIndex}`)
       console.log('===')
 
-      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
       const fromTasks = this.board.columns[fromColumnIndex].tasks
-      const fromTaskIndex = e.dataTransfer.getData('from-task-index')
 
       this.$store.commit('MOVE_TASK', {
         fromTasks,
         fromTaskIndex,
-        toTasks,
-        toTaskIndex
+        toTasks: this.column.tasks,
+        toTaskIndex: this.column.taskIndex
       })
     },
-    moveColumn (e, toColumnIndex) {
+    moveColumn ({ fromColumnIndex }) {
       console.log('=== [BOARD | METHODS] MOVE COLUMN')
-      console.log(`toColumnIndex : ${toColumnIndex}`)
       console.log('===')
-
-      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
 
       this.$store.commit('MOVE_COLUMN', {
         fromColumnIndex,
-        toColumnIndex
+        toColumnIndex: this.columnIndex
       })
     }
   }
