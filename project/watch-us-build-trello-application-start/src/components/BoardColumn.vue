@@ -31,71 +31,15 @@
 </template>
 <script>
 import ColumnTask from './ColumnTask'
+import movingTasksAndColumnsMixin from '@/mixins/movingTasksAndColumnsMixin'
 
 export default {
   components: { ColumnTask },
-  props: {
-    column: {
-      type: Object,
-      required: true
-    },
-    columnIndex: {
-      type: Number,
-      required: true
-    },
-    board: {
-      type: Object,
-      required: true
-    }
-  },
+  mixins: [movingTasksAndColumnsMixin],
   methods: {
-    moveTaskOrColumn (e, toTasks, toColumnIndex, toTaskIndex) {
-      console.log('=== [BOARD | METHODS] MOVE TASK OR COLUMN')
-      console.log(`toTasks : ${toTasks}`)
-      console.log(`toColumnIndex : ${toColumnIndex}`)
-      console.log(`toTaskIndex : ${toTaskIndex}`)
-      console.log('===')
-
-      const type = e.dataTransfer.getData('type')
-
-      if (type === 'task') {
-        this.moveTask(e, toTasks, toTaskIndex !== undefined ? toTaskIndex : toTasks.length)
-      } else {
-        this.moveColumn(e, toColumnIndex)
-      }
-    },
-    moveTask (e, toTasks, toTaskIndex) {
-      console.log('=== [BOARD | METHODS] MOVE TASK')
-      console.log(`toTasks : ${toTasks}`)
-      console.log(`toTaskIndex : ${toTaskIndex}`)
-      console.log('===')
-
-      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
-      const fromTasks = this.board.columns[fromColumnIndex].tasks
-      const fromTaskIndex = e.dataTransfer.getData('from-task-index')
-
-      this.$store.commit('MOVE_TASK', {
-        fromTasks,
-        fromTaskIndex,
-        toTasks,
-        toTaskIndex
-      })
-    },
-    moveColumn (e, toColumnIndex) {
-      console.log('=== [BOARD | METHODS] MOVE COLUMN')
-      console.log(`toColumnIndex : ${toColumnIndex}`)
-      console.log('===')
-
-      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
-
-      this.$store.commit('MOVE_COLUMN', {
-        fromColumnIndex,
-        toColumnIndex
-      })
-    },
     pickupColumn (e, fromColumnIndex) {
       console.log('=== [BOARD | METHODS] PICK UP COLUMN')
-      console.log(`fromColumnIndex : ${fromTaskIndex}`)
+      console.log(`fromColumnIndex : ${fromColumnIndex}`)
       console.log('===')
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.dropEffect = 'move'
