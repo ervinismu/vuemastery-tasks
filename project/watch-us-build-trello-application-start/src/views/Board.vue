@@ -12,9 +12,9 @@
         @dragstart.self="pickupColumn($event, $columnIndex)"
       >
 
-      <div class="flex items-center mb-2 font-bold">
-        {{ column.name }}
-      </div>
+        <div class="flex items-center mb-2 font-bold">
+          {{ column.name }}
+        </div>
 
         <div class="list-reset">
           <div 
@@ -45,6 +45,16 @@
             @keyup.enter="createTask($event, column.tasks)"
           />
         </div>
+
+      </div>
+      
+      <div class="column flex">
+        <input
+          class="p-2 mr-2 flex-grow"
+          placeholder="New column name"
+          v-model="newColumnName"
+          @keyup.enter="createColumn"
+        />
       </div>
     </div>
 
@@ -55,6 +65,7 @@
     >
       <router-view/>
     </div>
+
   </div>
 </template>
 
@@ -154,6 +165,12 @@ export default {
         fromColumnIndex,
         toColumnIndex
       })
+    },
+    createColumn () {
+      this.$store.commit('CREATE_COLUMN', {
+        name: this.newColumnName
+      })
+      this.newColumnName = ''
     }
   }
 }
